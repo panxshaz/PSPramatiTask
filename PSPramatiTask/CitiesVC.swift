@@ -14,39 +14,52 @@ class CitiesVC: UIViewController {
   @IBOutlet weak var sortButton: UIButton!
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet var cityCountLabel: UILabel!
-  @IBOutlet weak var tableViewTopSpaceToSafeConstaint: NSLayoutConstraint!
-  @IBOutlet weak var searchBar: UISearchBar!
+  var searchBar: UISearchBar {
+    return searchController.searchBar
+  }
   
   var state: AppState = AppState([]) {
     didSet {
       updateTableViewWithState()
       sortButton.isSelected = !state.isSortAscending
-      searchBar.text = state.filterText
-      searchBar.showsCancelButton = state.inSearchMode
+      if state.filterText != searchBar.text {
+        searchBar.text = state.filterText
+        //this will updateSearchResults which will in turn set `state` 
+      }
     }
   }
   
   
-  
   ///Solely to be called from `didSet` of `state`
   private func updateTableViewWithState() {
-//    tableViewTopSpaceToSafeConstaint.priority = state.cities.isEmpty && !state.inSearchMode ? UILayoutPriority.defaultHigh : UILayoutPriority.defaultLow
     cityCountLabel.text = state.cities.isEmpty ? AppText.noMatchesFound : AppText.ShowingCities(state.cities.count).displayText
-    
-    UIView.animate(withDuration: 0.3) {
-      self.tableView.layoutIfNeeded()
-    }
-    
     waitingLabel.isHidden = state.inSearchMode || !state.cities.isEmpty
     // State change reload data
     tableView.reloadData()
   }
   
+  
+  let searchController = UISearchController(searchResultsController: nil)
+  
   override func viewDidLoad() {
     super.viewDidLoad()
+    // Setup the Search Controller
+    searchController.searchResultsUpdater = self
+    searchController.obscuresBackgroundDuringPresentation = false
+    searchController.searchBar.searchBarStyle = .minimal
+    searchController.searchBar.placeholder = "Search cities"
+    definesPresentationContext = true
+    searchController.searchBar.delegate = self
+    if #available(iOS 11.0, *) {
+      //Show the search bar in Navigation Item
+      navigationItem.searchController = searchController
+    } else {
+      //Show the search bar in tableview header
+      //Had to mark automaticallyAdjustsScrollViewInsets false
+      self.tableView.tableHeaderView = searchController.searchBar
+    }
     
     self.tableView.rowHeight = 40
-//    self.tableView.tableHeaderView = searchBar
     self.tableView.tableFooterView = cityCountLabel
     
     DataManager.shared.getCities(preferDB: true) { [weak self] (cities, error) in
@@ -69,6 +82,15 @@ class CitiesVC: UIViewController {
   @IBAction func sortPressed(_ sender: Any) {
     state = state.updateSortMode(!state.isSortAscending)
   }
+  
+  ///Just a fancy action where you can see my website
+  @IBAction func showMyProfile(_ sender: Any) {
+    guard let myWebsite = URL(string: Constants.myWebsite) else { return }
+    UIApplication.shared.open(myWebsite)
+//    let safatiVC = SFSafariViewController(url: myWebsite)
+//    self.present(safatiVC, animated: true, completion: nil)
+  }
+  
 }
 
 
@@ -91,7 +113,7 @@ extension CitiesVC: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "CityTVCell", for: indexPath) as! CityTVCell
     // Configure the cell...
-    if searchBar.isFirstResponder {
+    if searchController.isActive {
       cell.update(with: state.cities[indexPath.row], highlightText: state.filterText)
     } else {
       cell.update(with: state.cities[indexPath.row])
@@ -142,5 +164,15 @@ extension CitiesVC: UISearchBarDelegate {
     if let validIndexPaths = tableView.indexPathsForVisibleRows {
       tableView.reloadRows(at: validIndexPaths, with: UITableViewRowAnimation.automatic)
     }
+  }
+}
+
+
+//*******************************************************************//
+// MARK:- SearchUpdating
+//*******************************************************************//
+extension CitiesVC: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+    state.filterText = searchController.searchBar.text ?? ""
   }
 }
