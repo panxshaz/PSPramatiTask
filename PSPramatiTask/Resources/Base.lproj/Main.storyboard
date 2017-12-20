@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tiI-Df-HAZ">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Cities-->
+        <scene sceneID="ecB-uu-Ze0">
+            <objects>
+                <viewController storyboardIdentifier="CitiesVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ZF9-5n-jfq" userLabel="Cities" customClass="CitiesVC" customModule="PSPramatiTask" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JZO-Tz-0Xm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="FhM-82-pRq">
+                                <rect key="frame" x="0.0" y="116" width="375" height="551"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <searchBar key="tableHeaderView" contentMode="redraw" searchBarStyle="minimal" placeholder="Type here to filter cities" id="WKz-H7-u0f">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="ZF9-5n-jfq" id="zWf-1r-89U"/>
+                                    </connections>
+                                </searchBar>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CityTVCell" textLabel="b3w-RZ-n8b" detailTextLabel="rK9-bV-Gxc" rowHeight="50" style="IBUITableViewCellStyleValue1" id="qnO-S8-Pk5" userLabel="CityCell" customClass="CityTVCell" customModule="PSPramatiTask" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="84" width="375" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qnO-S8-Pk5" id="yLZ-sV-c6t">
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="49.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="b3w-RZ-n8b">
+                                                    <rect key="frame" x="15" y="15" width="33.5" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rK9-bV-Gxc">
+                                                    <rect key="frame" x="307" y="20" width="33" height="14.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="populationLabel" destination="rK9-bV-Gxc" id="Txf-Nw-23r"/>
+                                            <outlet property="titleLabel" destination="b3w-RZ-n8b" id="TyV-pR-TFb"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="ZF9-5n-jfq" id="ajF-ND-xk5"/>
+                                    <outlet property="delegate" destination="ZF9-5n-jfq" id="ylv-Po-r4K"/>
+                                </connections>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please wait..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mYs-8r-Vev">
+                                <rect key="frame" x="138" y="324" width="98.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="mYs-8r-Vev" firstAttribute="centerY" secondItem="JZO-Tz-0Xm" secondAttribute="centerY" id="3w5-Hz-sTF"/>
+                            <constraint firstItem="FhM-82-pRq" firstAttribute="top" secondItem="Er8-ZF-UHa" secondAttribute="top" priority="750" id="IhP-5N-9BO"/>
+                            <constraint firstItem="mYs-8r-Vev" firstAttribute="centerX" secondItem="JZO-Tz-0Xm" secondAttribute="centerX" id="OMC-qP-8Xa"/>
+                            <constraint firstItem="FhM-82-pRq" firstAttribute="bottom" secondItem="Er8-ZF-UHa" secondAttribute="bottom" id="bNV-Fa-6R5"/>
+                            <constraint firstItem="FhM-82-pRq" firstAttribute="leading" secondItem="Er8-ZF-UHa" secondAttribute="leading" id="nPZ-lU-YXR"/>
+                            <constraint firstItem="FhM-82-pRq" firstAttribute="trailing" secondItem="Er8-ZF-UHa" secondAttribute="trailing" id="tX0-xB-uxC"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Er8-ZF-UHa"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Cities" id="oxk-OE-8zh">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="IVK-Cq-0gM">
+                            <button key="customView" opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="o4z-hb-T49" userLabel="Author Button">
+                                <rect key="frame" x="16" y="0.0" width="32" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="OsC-uN-mud"/>
+                                    <constraint firstAttribute="height" constant="32" id="Xxy-g9-VkG"/>
+                                </constraints>
+                                <state key="normal" image="Logo"/>
+                                <connections>
+                                    <action selector="showMyProfile:" destination="ZF9-5n-jfq" eventType="touchUpInside" id="EfJ-Vq-YqN"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="ybB-Md-Hho">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Oqb-er-BlD">
+                                <rect key="frame" x="280" y="6.5" width="79" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="0.078431372550000003" green="0.1450980392" blue="0.43921568630000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" image="sort_asc"/>
+                                <state key="selected" image="sort_desc"/>
+                                <connections>
+                                    <action selector="sortPressed:" destination="ZF9-5n-jfq" eventType="touchUpInside" id="vzs-gz-Gwz"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="cityCountLabel" destination="L50-PW-RUX" id="yuW-jG-w80"/>
+                        <outlet property="searchBar" destination="WKz-H7-u0f" id="rqO-tO-ThQ"/>
+                        <outlet property="sortButton" destination="Oqb-er-BlD" id="F2R-nB-eGH"/>
+                        <outlet property="tableView" destination="FhM-82-pRq" id="igz-tE-nIs"/>
+                        <outlet property="tableViewTopSpaceToSafeConstaint" destination="IhP-5N-9BO" id="agZ-9U-0BA"/>
+                        <outlet property="waitingLabel" destination="mYs-8r-Vev" id="cSH-uU-buo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X1A-Of-31Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Match Found" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="L50-PW-RUX" userLabel="Cities Count Label">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </objects>
+            <point key="canvasLocation" x="415.19999999999999" y="112.89355322338831"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="fKw-ml-Jg2">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tiI-Df-HAZ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="Jpk-YS-vp4">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ZF9-5n-jfq" kind="relationship" relationship="rootViewController" id="bCI-fH-FIE"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DcZ-T4-YZe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-450" y="113"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Logo" width="150" height="150"/>
+        <image name="sort_asc" width="30" height="30"/>
+        <image name="sort_desc" width="30" height="30"/>
+    </resources>
+</document>
