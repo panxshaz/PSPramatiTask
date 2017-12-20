@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     //TODO: Uncomment the following line to enable Coredata persistence
-//    Constants.isPersistingData = true
+    Constants.isPersistingData = true
     // Override point for customization after application launch.
     return true
   }
