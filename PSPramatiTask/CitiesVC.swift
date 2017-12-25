@@ -62,16 +62,29 @@ class CitiesVC: UIViewController {
     self.tableView.rowHeight = 40
     self.tableView.tableFooterView = cityCountLabel
     
-    DataManager.shared.getCities(preferDB: true) { [weak self] (cities, error) in
-      if let validCities = cities {
-        self?.state = AppState(validCities)
-      } else {
-        self?.showSimpleAlert(title: AppText.warning, msg: error as? String)
+    DataManager.shared.getCities(completion: nil)
+    
+//    DataManager.shared.getCities(preferDB: true) { [weak self] (cities, error) in
+//      if let validCities = cities {
+//        self?.state = AppState(validCities)
+//      } else {
+//        self?.showSimpleAlert(title: AppText.warning, msg: error as? String)
+//      }
+//    }
+    _ = self.tableView.addScrollToEndButton()
+    
+    
+    NotificationCenter.default.addObserver(forName: NSNotification.Name.NSManagedObjectContextDidSave, object: DataManager.shared.moc, queue: OperationQueue.main) { [unowned self] (note) in
+      let validCities = DataManager.shared.getPersistedData(self.state.isSortAscending)
+      self.state = AppState(validCities)
+    }
+    DispatchQueue(label: "background").async { autoreleasepool {
+      let abc = 12
       }
     }
-    _ = self.tableView.addScrollToEndButton()
+    
   }
-
+  
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.

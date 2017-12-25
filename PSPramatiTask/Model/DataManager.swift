@@ -80,14 +80,35 @@ class DataManager {
         let cities = CityEntity.createCities(fromData: citiesCSVs)
         DispatchQueue.main.async {
           completion?(cities, nil)
-          #if USE_CORE_DATA
-            DispatchQueue.main.async {
-              if Constants.isPersistingData {
-                self.saveData(entities: cities)
-              }
-            }
-          #endif
+          //          #if USE_CORE_DATA
+          //            DispatchQueue.main.async {
+          //              if Constants.isPersistingData {
+          //                self.saveData(entities: cities)
+          //              }
+          //            }
+          //          #endif
         }
+        #if USE_CORE_DATA
+          if Constants.isPersistingData {
+            let citiesCount = cities.count
+            DispatchQueue.global(qos: .background).async {
+              let cities1stQuarter = Array(cities[0...citiesCount/4])
+              self.saveData(entities: cities1stQuarter)
+            }
+            
+            DispatchQueue.global(qos: .background).async {
+              let cities2ndQuarter = Array(cities[(1+citiesCount/4)...citiesCount/2])
+              self.saveData(entities: cities2ndQuarter)
+            }
+            
+            DispatchQueue.global(qos: .background).async {
+              let cities2ndHalf = Array(cities.dropFirst(citiesCount/2))
+              self.saveData(entities: cities2ndHalf)
+            }
+//            self.saveData(entities: cities)
+          }
+        #endif
+        
       } catch {
         let errorStr = "File Read Error for file \(filepath)"
         DispatchQueue.main.async {
@@ -188,6 +209,7 @@ class DataManager {
         try context?.execute(deleteRequest)
         try context?.execute(deleteCititesRequest)
         try context?.save()
+        print("All Deleted!")
         return true
       } catch {
         print ("There was an error in deleting")
