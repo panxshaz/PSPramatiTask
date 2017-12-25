@@ -5,8 +5,14 @@
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="population" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="country" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CountryCoreEntity" inverseName="cities" inverseEntity="CountryCoreEntity" syncable="YES"/>
+    </entity>
+    <entity name="CountryCoreEntity" representedClassName="CountryCoreEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="countryCode" attributeType="String" syncable="YES"/>
+        <relationship name="cities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CityCoreEntity" inverseName="country" inverseEntity="CityCoreEntity" syncable="YES"/>
     </entity>
     <elements>
-        <element name="CityCoreEntity" positionX="-63" positionY="-18" width="128" height="105"/>
+        <element name="CityCoreEntity" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="CountryCoreEntity" positionX="124" positionY="6" width="128" height="73"/>
     </elements>
 </model>

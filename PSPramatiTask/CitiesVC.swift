@@ -91,6 +91,9 @@ class CitiesVC: UIViewController {
 //    self.present(safatiVC, animated: true, completion: nil)
   }
   
+  @IBAction func cleanDB(_ sender: Any) {
+   DataManager.shared.deleteAllData()
+  }
 }
 
 

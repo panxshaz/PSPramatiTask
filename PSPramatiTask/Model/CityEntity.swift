@@ -18,6 +18,7 @@ class CityEntity: NSObject {
   ///Apparently this is the primary key
   let title: String
   let population: Int
+  var country: String?
   var latitude: Double?
   var longitude: Double?
   
@@ -28,6 +29,7 @@ class CityEntity: NSObject {
   }
 
   private enum CityIndexKey: Int {
+    case country = 0
     case title = 2
     case population = 4
     case latitude = 5
@@ -40,6 +42,7 @@ class CityEntity: NSObject {
     population = Int(csv[CityIndexKey.population.rawValue]) ?? 0
     latitude = Double(csv[CityIndexKey.latitude.rawValue])
     longitude = Double(csv[CityIndexKey.longitude.rawValue])
+    country = csv[CityIndexKey.country.rawValue]
   }
   
   
@@ -52,14 +55,15 @@ class CityEntity: NSObject {
     return cities
   }
   
-
+  
   
   #if USE_CORE_DATA
   init(coreEntity: CityCoreEntity) {
-  title = coreEntity.title!
-  population = Int(coreEntity.population)
-  latitude = coreEntity.latitude
-  longitude = coreEntity.longitude
+    title = coreEntity.title!
+    population = Int(coreEntity.population)
+    latitude = coreEntity.latitude
+    longitude = coreEntity.longitude
+    country = coreEntity.country?.countryCode
   }
   #endif
 }
@@ -68,12 +72,30 @@ class CityEntity: NSObject {
 
 #if USE_CORE_DATA
   extension CityCoreEntity {
-    func update(with city: CityEntity) {
+    func update(with city: CityEntity) throws {
       let coreEntity = self
       coreEntity.title = city.title
       coreEntity.population = Int32(city.population)
       coreEntity.latitude = city.latitude ?? 0
-      coreEntity.longitude = city.longitude ?? 0
+      coreEntity.longitude = city.longitude ?? 0      
+      
+      //country
+      if let validCountryCode = city.country, let context = coreEntity.managedObjectContext {
+        let countryFetchRequest: NSFetchRequest<CountryCoreEntity> = CountryCoreEntity.fetchRequest()
+        countryFetchRequest.predicate = NSPredicate(format: "countryCode == %@", validCountryCode)
+        var countryEntity = try context.fetch(countryFetchRequest).first
+        if countryEntity == nil {
+          //create new
+          countryEntity = CountryCoreEntity(context: context)
+          countryEntity?.countryCode = validCountryCode
+        }
+        coreEntity.country = countryEntity
+      }
     }
   }
+  
+  extension CountryCoreEntity {
+    
+  }
+  
 #endif

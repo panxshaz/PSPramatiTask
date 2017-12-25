@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -74,20 +75,27 @@
                         <viewLayoutGuide key="safeArea" id="Er8-ZF-UHa"/>
                     </view>
                     <navigationItem key="navigationItem" title="Cities" id="oxk-OE-8zh">
-                        <barButtonItem key="leftBarButtonItem" id="IVK-Cq-0gM">
-                            <button key="customView" opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="o4z-hb-T49" userLabel="Author Button">
-                                <rect key="frame" x="16" y="6" width="32" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="32" id="OsC-uN-mud"/>
-                                    <constraint firstAttribute="height" constant="32" id="Xxy-g9-VkG"/>
-                                </constraints>
-                                <state key="normal" image="logo_small"/>
+                        <leftBarButtonItems>
+                            <barButtonItem id="IVK-Cq-0gM">
+                                <button key="customView" opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="o4z-hb-T49" userLabel="Author Button">
+                                    <rect key="frame" x="16" y="6" width="32" height="32"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="OsC-uN-mud"/>
+                                        <constraint firstAttribute="height" constant="32" id="Xxy-g9-VkG"/>
+                                    </constraints>
+                                    <state key="normal" image="logo_small"/>
+                                    <connections>
+                                        <action selector="showMyProfile:" destination="ZF9-5n-jfq" eventType="touchUpInside" id="EfJ-Vq-YqN"/>
+                                    </connections>
+                                </button>
+                            </barButtonItem>
+                            <barButtonItem systemItem="trash" id="O7e-aR-git">
                                 <connections>
-                                    <action selector="showMyProfile:" destination="ZF9-5n-jfq" eventType="touchUpInside" id="EfJ-Vq-YqN"/>
+                                    <action selector="cleanDB:" destination="ZF9-5n-jfq" id="qc7-oE-CJc"/>
                                 </connections>
-                            </button>
-                        </barButtonItem>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <barButtonItem key="rightBarButtonItem" id="ybB-Md-Hho">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Oqb-er-BlD">
                                 <rect key="frame" x="280" y="6.5" width="79" height="31"/>

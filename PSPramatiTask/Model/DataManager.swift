@@ -15,7 +15,13 @@ class DataManager {
   
   
   let moc = NSManagedObjectContext(concurrencyType:.privateQueueConcurrencyType)
-
+  
+  
+  lazy private var context2: NSManagedObjectContext? = {
+//    var context2 = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+    let container = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    return container?.newBackgroundContext()
+  }()
   
   lazy private var context: NSManagedObjectContext? = {
     let mainContext = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
@@ -29,6 +35,20 @@ class DataManager {
     if Constants.isPersistingData, let _ = context {
       print("Has Valid Context")
     }
+    
+    NotificationCenter.default.addObserver(forName: NSNotification.Name.NSManagedObjectContextWillSave, object: nil, queue: nil) { (note) in
+      print("Note \(note)")
+    }
+    
+    NotificationCenter.default.addObserver(forName: NSNotification.Name.NSManagedObjectContextDidSave, object: nil, queue: nil) { (note) in
+//      self.context2!.mergeChanges(fromContextDidSave: note)
+      print("Note \(note)")
+    }
+    
+    NotificationCenter.default.addObserver(forName: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil, queue: nil) { (note) in
+      print("Note \(note)")
+    }
+    
   }
   
   typealias ParsingCompletion = (([CityEntity]?, Error?) -> ())
@@ -130,8 +150,6 @@ class DataManager {
     func saveData(entities: [CityEntity]?) {
       guard let context = self.context, let entities = entities else { return }
       context.perform {
-        
-        
         do {
           let fetchRequest: NSFetchRequest<CityCoreEntity> = CityCoreEntity.fetchRequest()
           //order is important
@@ -145,7 +163,7 @@ class DataManager {
               //create new
               coreEntity = CityCoreEntity(context: context)
             }
-            coreEntity.update(with: entity)
+            try coreEntity.update(with: entity)
           }
           try context.save()
         } catch {
@@ -156,12 +174,19 @@ class DataManager {
     
     
     
+    //Batch deletes disregard delete rules
+    //https://stackoverflow.com/questions/32915874/can-i-use-nsbatchdeleterequest-on-entities-with-relationships-that-have-delete-r
     func deleteAllData() -> Bool {
-      let deleteFetch: NSFetchRequest<NSFetchRequestResult> = CityCoreEntity.fetchRequest()
-      
+      let deleteFetch: NSFetchRequest<NSFetchRequestResult> = CountryCoreEntity.fetchRequest()
       let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+      
+      //delete the cities as well. because "NSBatchDeleteRequest" disregard delete rules
+      let deleteCitiesFetch: NSFetchRequest<NSFetchRequestResult> = CityCoreEntity.fetchRequest()
+      let deleteCititesRequest = NSBatchDeleteRequest(fetchRequest: deleteCitiesFetch)
+      
       do {
         try context?.execute(deleteRequest)
+        try context?.execute(deleteCititesRequest)
         try context?.save()
         return true
       } catch {
